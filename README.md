@@ -46,7 +46,31 @@ The system uses a two-pass retry mechanism: if a tool call fails (e.g. invalid c
 - Minecraft **1.20.1**
 - **Fabric Loader** 0.15.0 or newer
 - **Fabric API**
-- Google Gemini **API key** (free tier available at ai.google.dev)
+- Google Gemini **API key**
+
+---
+
+## Getting a Gemini API key
+
+1. Go to https://aistudio.google.com/app/apikey
+2. Sign in with your Google account
+3. Click **"Create API key"**
+4. Copy the generated key (starts with `AIzaSy...`)
+5. Launch Minecraft and paste it in the Glascoss configuration screen (title screen button or `/glascoss apikey <key>`)
+
+The free tier includes 500 requests per day on `gemini-2.1-flash-lite`, which is more than enough for normal gameplay. No credit card is required.
+
+### Common API errors
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| `Quota exceeded` / `RESOURCE_EXHAUSTED` | Free tier daily limit reached | Wait a few hours or switch to a different model in settings |
+| `API key not valid` / `API key not found` | Wrong or revoked key | Generate a new key at aistudio.google.com |
+| `Model not found` | Invalid model name | Use `gemini-2.1-flash-lite` or `gemini-2.0-flash`. Check available models in Google AI documentation |
+| `Permission denied` | API key restrictions | Make sure the key has Generative Language API enabled in Google Cloud Console |
+| `Rate limit` | Too many requests in a short period | The mod handles this automatically, but if it persists, wait a minute |
+
+If the API key is missing or invalid, the mod simply does not respond to chat. No crashes or errors occur.
 
 ---
 
@@ -93,11 +117,12 @@ Personalities persist per world. Switching personalities resets the conversation
 
 ## Known limitations
 
-- Designed for **single-player and LAN worlds**. Online server support is experimental.
-- **Mobile/PE versions** are not supported. The mod relies on Java Edition mechanics.
-- Mods that add **new blocks, items, or entities** may or may not work with the AI's tool system. The AI uses Minecraft identifiers and may fail on custom content.
-- The AI may occasionally fail to parse tool calls correctly. The retry mechanism handles most cases, but some edge cases still produce errors.
-- Gemini API free tier has rate limits (500 requests/day for flash-lite). Heavy usage may trigger quota errors.
+- Designed for **single-player and LAN worlds**. Online server support is experimental and may have unpredictable behavior.
+- **Mobile and Bedrock Edition** are not and will not be supported. The mod relies on Java Edition server-side mechanics that do not exist on other platforms.
+- **Mods that add new blocks, items, or entities** may cause issues. The AI uses standard Minecraft identifiers and has no knowledge of custom content. It may try to use modded blocks incorrectly or fail to recognize them. Use with such mods at your own risk.
+- **World type**: the mod was designed for standard Overworld gameplay. The AI may behave unexpectedly in modded dimensions, superflat worlds, or custom map worlds.
+- The AI may occasionally fail to parse tool calls correctly. The automatic retry system handles most cases, but some edge cases may still produce visible errors in chat.
+- The Gemini API free tier has a limit of 500 requests per day on `gemini-2.1-flash-lite`. Under heavy use this limit can be reached. Either wait for the daily reset, or switch to a paid tier model.
 
 ---
 
